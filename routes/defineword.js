@@ -20,10 +20,11 @@ request.post(
         if (!error && response.statusCode == 200) {
            //console.log(response);
            parseString(response.body, function (err, result) {
-           	var jsonp = JSON.stringify(result);
-           	var jsonparsed = JSON.parse(jsonp);
-           	console.log(jsonparsed.entry_list.entry);
-			save(req.query.wordtodefine, JSON.stringify(jsonparsed.entry_list.entry)); 
+           	console.log(result.entry_list.entry[0].def[0].dt);
+           	// var jsonp = JSON.stringify(result);
+           	// var jsonparsed = JSON.parse(jsonp);
+           	//console.log(jsonparsed.entry_list.entry);
+			save(req.query.wordtodefine, result.entry_list.entry[0].def[0].dt); 
 			});
         }
     }

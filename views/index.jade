@@ -1,0 +1,8 @@
+extends layout
+
+block content
+  form(action="/findDefintion", method="get")
+    div
+      label(for="wordentry") Enter a Word:
+      input(type="text", id="wordentry", name="wordtodefine" placeholder="Enter a word to be defined")
+    button.btn.btn-primary(type="submit", value="Get Definiton") Get Definition

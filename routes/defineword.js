@@ -1,5 +1,8 @@
 var request = require('request');
 var parseString = require('xml2js').parseString;
+var rtg = require("url").parse('redis://redistogo:99b28b6ed18ca680d7e0d699ada7465c@grideye.redistogo.com:10316/');
+var db =  require('redis').createClient(rtg.port, rtg.hostname);
+db.auth("99b28b6ed18ca680d7e0d699ada7465c");
 
 exports.findDefinition = function (req, res) {
 
@@ -17,7 +20,10 @@ request.post(
         if (!error && response.statusCode == 200) {
            //console.log(response);
            parseString(response.body, function (err, result) {
-    		console.log(JSON.stringify(result));
+           	var jsonp = JSON.stringify(result);
+           	var jsonparsed = JSON.parse(jsonp);
+           	console.log(jsonparsed.entry_list.entry);
+			save(req.query.wordtodefine, JSON.stringify(jsonparsed.entry_list.entry)); 
 			});
         }
     }
@@ -25,4 +31,10 @@ request.post(
 
 res.render('index');
 res.end();
+};
+
+save = function (word, defintion) {
+	db.set(word, defintion, function (err) {
+		if (err) return console.log(err);
+	});
 };
